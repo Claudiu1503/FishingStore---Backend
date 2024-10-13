@@ -1,4 +1,4 @@
-package com.backend.fishingstore.service;
+package com.backend.fishingstore.serviceCSV;
 
 import com.backend.fishingstore.model.User;
 import com.backend.fishingstore.repository.UserRepository;

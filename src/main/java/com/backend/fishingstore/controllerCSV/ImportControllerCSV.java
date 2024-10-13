@@ -1,10 +1,8 @@
-package com.backend.fishingstore.controller;
+package com.backend.fishingstore.controllerCSV;
 
-import com.backend.fishingstore.service.UserService;
-import com.backend.fishingstore.service.UserServiceCSV;
+import com.backend.fishingstore.serviceCSV.UserServiceCSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
