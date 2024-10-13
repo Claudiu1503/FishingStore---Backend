@@ -1,0 +1,11 @@
+name,email,password,location,is_verified,verification_token
+John Doe,john.doe@example.com,Password123,New York,false,token123
+Jane Smith,jane.smith@example.com,SecretPassword,Los Angeles,true,token456
+Michael Johnson,michael.johnson@example.com,MyPassword2024,Chicago,false,token789
+Emily Davis,emily.davis@example.com,Password456,San Francisco,true,token012
+Robert Brown,robert.brown@example.com,SecurePass123,Miami,false,token345
+Jessica Williams,jessica.williams@example.com,JessPassword,Denver,true,token678
+David Miller,david.miller@example.com,Passw0rd!,Seattle,false,token901
+Sarah Wilson,sarah.wilson@example.com,Password321,Dallas,true,token234
+Daniel Moore,daniel.moore@example.com,MyPass2024,Atlanta,false,token567
+Laura Taylor,laura.taylor@example.com,LauraSecure123,Houston,true,token890
