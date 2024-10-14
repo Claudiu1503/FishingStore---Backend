@@ -18,10 +18,10 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/list-users")
-    public List<User> listAll(){
-        return userService.listAllUsers();
-    }
+  @GetMapping("/view-profile/{}")
+  public String getUserProfile(@PathVariable int id) {
+      return userService.getUserProfile(id);
+  }
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody User user) {

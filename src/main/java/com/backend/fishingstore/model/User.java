@@ -38,6 +38,10 @@ public class User {
     @NotBlank(message = "Password is required")
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     private String location;
 
     private Boolean isVerified;
@@ -57,4 +61,7 @@ public class User {
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+
+
 }
