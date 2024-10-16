@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService  {
         // Criptăm parolaa
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         user.setIsVerified(false); // Inițial nu este verificat
         user.setRole(Role.USER);// by default e user
 
