@@ -18,14 +18,11 @@ public class UserController {
     @Autowired
     UserService userService;
 
-  @GetMapping("/view-profile/{}")
-  public String getUserProfile(@PathVariable int id) {
-      return userService.getUserProfile(id);
-  }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody User user) {
+    //Numa daca e a lui id-ul!!!!
+//  @GetMapping("/view-profile/{}")
+//  public String getUserProfileString(@PathVariable int id) {
+//      return userService.getUserProfile(id);
+//  }
 
-        return ResponseEntity.ok("User registered successfully!");
-    }
 }

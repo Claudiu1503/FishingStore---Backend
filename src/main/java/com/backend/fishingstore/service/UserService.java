@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserService {
 
-    String getUserProfile(int id);
+    String getUserProfileString(int id);
     List<User> listAllUsers();
     User register(User user);
     String login(String email, String password);

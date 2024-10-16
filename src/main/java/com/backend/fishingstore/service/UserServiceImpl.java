@@ -1,5 +1,6 @@
 package com.backend.fishingstore.service;
 
+import com.backend.fishingstore.model.Role;
 import com.backend.fishingstore.model.User;
 import com.backend.fishingstore.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -23,20 +24,23 @@ public class UserServiceImpl implements UserService  {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Override
     public User register(User user) {
         // Verificăm dacă email-ul este deja înregistrat
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException("Email already taken");
         }
 
-        // Criptăm parola
+        // Criptăm parolaa
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
         user.setIsVerified(false); // Inițial nu este verificat
+        user.setRole(Role.USER);// by default e user
 
         return userRepository.save(user);
     }
 
+    @Override
     public String login(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email"));
@@ -85,7 +89,7 @@ public class UserServiceImpl implements UserService  {
 
 
     @Override
-    public String getUserProfile(int id) {
+    public String getUserProfileString(int id) {
         return userRepository.findById(id).toString();
     }
 

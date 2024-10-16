@@ -6,15 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user/auth")
+@RequestMapping("/api")
 @AllArgsConstructor
 public class AuthenticationController {
 
@@ -32,17 +30,31 @@ public class AuthenticationController {
         }
     }
 
+
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> loginData) {
-        String email = loginData.get("email");
-        String password = loginData.get("password");
-        try {
-            String user = userService.login(email, password);
-            System.out.println("Logged in successfully");
-            return ResponseEntity.ok(user);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    public ResponseEntity<?> login(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Basic ")) {
+            String base64Credentials = authHeader.substring("Basic ".length()).trim();
+            String credentials = new String(Base64.getDecoder().decode(base64Credentials));
+            final String[] values = credentials.split(":", 2);
+            String email = values[0];
+            String password = values[1];
+
+//            Pentru debugging
+//            System.out.println("Email: " + email + ", Password: " + password);
+
+            try {
+                String user = userService.login(email, password);
+                return ResponseEntity.ok(user);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            }
         }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization header is missing or invalid.");
     }
+
+
+
 }
 
