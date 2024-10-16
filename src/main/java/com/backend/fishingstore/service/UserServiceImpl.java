@@ -2,9 +2,14 @@ package com.backend.fishingstore.service;
 
 import com.backend.fishingstore.model.Role;
 import com.backend.fishingstore.model.User;
+import com.backend.fishingstore.registerConfirmation.ConfirmationToken;
+import com.backend.fishingstore.registerConfirmation.ConfirmationTokenRepository;
+import com.backend.fishingstore.registerConfirmation.ConfirmationTokenService;
 import com.backend.fishingstore.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -22,24 +28,43 @@ public class UserServiceImpl implements UserService  {
     UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    ConfirmationTokenService confirmationTokenService;
+
 
     @Override
     public User register(User user) {
-        // Verificăm dacă email-ul este deja înregistrat
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalStateException("Email already taken");
+            throw new IllegalStateException("Email is already in use");
         }
 
-        // Criptăm parolaa
+        // Criptăm parola
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
         user.setIsVerified(false); // Inițial nu este verificat
-        user.setRole(Role.USER);// by default e user
 
-        return userRepository.save(user);
+        user.setRole(Role.USER); // by default e user
+
+    User savedUser = userRepository.save(user);
+
+        String token = UUID.randomUUID().toString();
+      ConfirmationToken confirmationToken = new ConfirmationToken(token,
+              LocalDateTime.now(),
+              LocalDateTime.now().plusDays(1), null,
+              user
+      );
+        savedUser.setVerificationToken(token);
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        return savedUser; // Returnăm User
     }
+
+
+
 
     @Override
     public String login(String email, String password) {
@@ -87,6 +112,12 @@ public class UserServiceImpl implements UserService  {
 
         return userRepository.save(user);
     }
+
+    @Override
+    public void saveUser(User user) {
+        userRepository.save(user); // Make sure you have a user repository
+    }
+
 
 
     @Override

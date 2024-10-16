@@ -20,15 +20,32 @@ public class AuthenticationController {
     private UserService userService;
 
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        try {
-            User newUser = userService.register(user);
-            return ResponseEntity.ok(newUser);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+//    @PostMapping("/register")
+//    public ResponseEntity<?> register(@RequestBody User user) {
+//        try {
+//            User newUser = userService.register(user);
+//            return ResponseEntity.ok(newUser);
+//        } catch (IllegalStateException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+@PostMapping("/register")
+public ResponseEntity<?> register(@RequestBody User user) {
+    try {
+        // Aici returnăm un ResponseEntity cu un obiect de tip User în caz de succes
+        User newUser = userService.register(user);
+        return ResponseEntity.ok(newUser); // Returnăm 200 OK și noul utilizator în răspuns
+    } catch (IllegalStateException e) {
+        if (e.getMessage().equals("Email already taken")) {
+            // Returnăm un răspuns cu 409 Conflict dacă email-ul este deja folosit
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
+        // Pentru alte tipuri de erori, returnăm 400 Bad Request
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
+}
+
+
 
 
 

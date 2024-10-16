@@ -1,6 +1,7 @@
 package com.backend.fishingstore.service;
 
 import com.backend.fishingstore.model.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +20,5 @@ public interface UserService {
     User updateUser(int id, User updatedUser);
 
 
+    void saveUser(User user);
 }
