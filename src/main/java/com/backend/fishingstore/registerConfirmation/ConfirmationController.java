@@ -34,8 +34,14 @@ public class ConfirmationController {
             return ResponseEntity.badRequest().body("Token has expired");
         }
 
-        // Step 4: Confirm the token
+
         User user = confirmationToken.getUser();
+        //Step 4 verificare daca useru e confirmat deja
+        if(user.getIsVerified()==true) {
+            return ResponseEntity.badRequest().body("User is already verified");
+        }
+
+        // Step 5: Confirm the token
         user.setIsVerified(true);
         userService.saveUser(user); // Assuming you have a method to save the user
 

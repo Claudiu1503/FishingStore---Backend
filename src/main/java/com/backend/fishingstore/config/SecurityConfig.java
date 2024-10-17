@@ -44,6 +44,7 @@ public class SecurityConfig {
 
                 .csrf(csrf -> csrf.disable()) // Deactivate CSRF
                 .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/user-confirmation").permitAll()
                         .requestMatchers("/api/register", "/api/login").permitAll() // Allow these endpoints without authentication
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

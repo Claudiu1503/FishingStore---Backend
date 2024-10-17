@@ -1,6 +1,7 @@
-package com.backend.fishingstore.loginController;
+package com.backend.fishingstore.admin;
 
 import com.backend.fishingstore.model.User;
+import com.backend.fishingstore.registerConfirmation.ConfirmationTokenRepository;
 import com.backend.fishingstore.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ public class AdminUserController {
 
     @Autowired
     private final UserService userService;
+    @Autowired
+    private ConfirmationTokenRepository confirmationTokenRepository;
 
     // Vizualizează toți utilizatorii
     @GetMapping("/list-users")
@@ -23,9 +26,16 @@ public class AdminUserController {
         return userService.listAllUsers();
     }
 
+    @GetMapping("/list-user/{id}")
+    public User listUserById(@PathVariable("id") int id) {
+        return userService.findUserById(id);
+    }
+
     // Șterge un utilizator
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable int id) {
+
+        confirmationTokenRepository.deleteById(id);
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
     }
