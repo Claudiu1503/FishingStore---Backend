@@ -1,9 +1,7 @@
-package com.backend.fishingstore.registerConfirmation;
+package com.backend.fishingstore.model;
 
-import com.backend.fishingstore.model.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 

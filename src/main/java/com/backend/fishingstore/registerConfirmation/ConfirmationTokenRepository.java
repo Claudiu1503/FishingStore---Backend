@@ -1,5 +1,6 @@
 package com.backend.fishingstore.registerConfirmation;
 
+import com.backend.fishingstore.model.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

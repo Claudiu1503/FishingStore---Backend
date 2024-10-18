@@ -1,5 +1,6 @@
 package com.backend.fishingstore.registerConfirmation;
 
+import com.backend.fishingstore.model.ConfirmationToken;
 import com.backend.fishingstore.model.User;
 import com.backend.fishingstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

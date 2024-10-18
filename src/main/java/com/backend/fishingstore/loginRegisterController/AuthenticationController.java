@@ -1,15 +1,16 @@
-package com.backend.fishingstore.loginController;
+package com.backend.fishingstore.loginRegisterController;
+import com.backend.fishingstore.DTO.ResetPasswordRequestDTO;
+import com.backend.fishingstore.model.PasswordResetToken;
 import com.backend.fishingstore.model.User;
 import com.backend.fishingstore.service.UserService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
-import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -19,16 +20,6 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-
-//    @PostMapping("/register")
-//    public ResponseEntity<?> register(@RequestBody User user) {
-//        try {
-//            User newUser = userService.register(user);
-//            return ResponseEntity.ok(newUser);
-//        } catch (IllegalStateException e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
 @PostMapping("/register")
 public ResponseEntity<?> register(@RequestBody User user) {
     try {
@@ -44,10 +35,6 @@ public ResponseEntity<?> register(@RequestBody User user) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
-
-
-
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestHeader("Authorization") String authHeader) {
@@ -69,6 +56,30 @@ public ResponseEntity<?> register(@RequestBody User user) {
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authorization header is missing or invalid.");
+    }
+
+
+    //Metoda cu DTO
+    @PostMapping("/reset-password-email-sender")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequestDTO resetPasswordRequest) {
+
+        String email = resetPasswordRequest.getEmail();
+
+        if (email == null || email.isBlank() || email.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is required.");
+        }
+
+//        System.out.println("Email primit pentru resetare parola: " + email);
+
+        Optional<User> userOptional = userService.findUserByEmail(email);
+
+        if (userOptional.isPresent()) {
+            // Logic to send reset password email
+            userService.mailSendResetPassowrd(resetPasswordRequest);
+            return ResponseEntity.status(HttpStatus.OK).body("S-a trimis un email pentru resetarea parolei");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email-ul nu a fost găsit.");
+        }
     }
 
 
