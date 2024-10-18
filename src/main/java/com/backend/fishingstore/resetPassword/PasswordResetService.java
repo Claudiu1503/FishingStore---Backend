@@ -30,4 +30,10 @@ public class PasswordResetService {
        passwordResetRepository.save(passwordResetToken);
 
     }
+    public void setPasswordResetTokenpassChanged(PasswordResetToken passwordResetToken) {
+        passwordResetToken.setPassChanged(true);
+        passwordResetRepository.save(passwordResetToken);
+
+    }
+
 }

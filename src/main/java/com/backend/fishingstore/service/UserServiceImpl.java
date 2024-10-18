@@ -84,6 +84,7 @@ public class UserServiceImpl implements UserService  {
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(1),
                 user,
+                false,
                 false
         );
         passwordResetService.savePasswordResetToken(passwordResetToken);

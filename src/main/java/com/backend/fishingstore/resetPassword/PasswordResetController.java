@@ -41,6 +41,11 @@ public class PasswordResetController {
             return ResponseEntity.badRequest().body("Invalid token");
         }
 
+        //verificam daca s-a schimbat deja o parola cu acest token
+        if(passwordResetToken.getPassChanged()==true){
+            return ResponseEntity.badRequest().body("Token was already used!");
+        }
+
         // Verifică expirarea token-ului
         if(passwordResetToken.getExpirationDate().isBefore(LocalDateTime.now())) {
             return ResponseEntity.badRequest().body("Expired token");
@@ -73,11 +78,17 @@ public class PasswordResetController {
             return ResponseEntity.badRequest().body("User not found");
         }
 
+        //verificam daca s-a schimbat deja o parola cu acest token
+        if(passwordResetToken.getPassChanged()==true){
+            return ResponseEntity.badRequest().body("Token was already used!");
+        }
+
 
         if(passwordResetToken.getIsVerified()==true){
 
             try {
                 User newUser = userService.updateUserPassword(user.getId(),newPassword);
+                passwordResetService.setPasswordResetTokenpassChanged(passwordResetToken);
                 return ResponseEntity.ok(newUser);
             } catch (IllegalStateException e) {
 
